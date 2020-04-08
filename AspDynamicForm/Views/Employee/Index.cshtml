@@ -1,0 +1,77 @@
+﻿@model IEnumerable<AspDynamicForm.Models.Employee>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+
+        <td id=@("fn_td_"+item.ID)>
+            @Html.DisplayFor(modelItem => item.FirstName)
+        </td>
+        <td id=@("ln_td_"+item.ID)>
+            @Html.DisplayFor(modelItem => item.LastName)
+        </td>
+        <td id=@("sub_"+item.ID)>
+            <button onclick="getForm(@item.ID)">ClickMe</button>
+            @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+        </td>
+
+    </tr>
+}
+
+</table>
+
+<script type="text/javascript">
+    function getForm(id) {
+        let form_fn = document.getElementById("fn_td_" + id);
+        let input_fn = document.createElement("input");
+        input_fn.setAttribute("name", "fn_input_" + id);
+        form_fn.appendChild(input_fn);
+        
+        let form_ln = document.getElementById("ln_td_" + id);
+        let input_ln = document.createElement("input");
+        input_ln.setAttribute("name", "ln_input_" + id);
+        form_ln.appendChild(input_ln);
+
+        let form_sub = document.getElementById("sub_"+id)
+        let submit = document.createElement("button");
+        submit.textContent = "Valider";
+        submit.addEventListener("click", function () {
+            edit({ "ID": id, "FirstName": input_fn.value, "LastName": input_ln.value });
+        });
+        form_sub.appendChild(submit);
+    }
+
+    function edit(object) {
+        console.log(object);
+        $.ajax({
+            url: '@Url.Action("Edit", "Employee")',
+            type: 'POST',
+            data: object,
+            dataType : 'json',
+            success: function (result) {
+                console.log("Ok!");
+            }
+        });
+    }
+</script>
