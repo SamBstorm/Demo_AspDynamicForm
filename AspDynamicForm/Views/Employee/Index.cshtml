@@ -44,11 +44,13 @@
 <script type="text/javascript">
     function getForm(id) {
         let form_fn = document.getElementById("fn_td_" + id);
+        let old_fn = form_fn.textContent;
         let input_fn = document.createElement("input");
         input_fn.setAttribute("name", "fn_input_" + id);
         form_fn.appendChild(input_fn);
         
         let form_ln = document.getElementById("ln_td_" + id);
+        let old_fn = form_fn.textContent;
         let input_ln = document.createElement("input");
         input_ln.setAttribute("name", "ln_input_" + id);
         form_ln.appendChild(input_ln);
@@ -69,8 +71,12 @@
             type: 'POST',
             data: object,
             dataType : 'json',
-            success: function (result) {
+            success: function (data) {
                 console.log("Ok!");
+                if (data.IsSuccess)
+                    window.location.href = data.Url;
+                else
+                    console.log("Fail :/")
             }
         });
     }

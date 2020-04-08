@@ -21,7 +21,7 @@ namespace AspDynamicForm.Controllers
         public ActionResult Edit(Models.Employee employee)
         {
             _service.Update(employee.ID, employee);
-            return RedirectToAction("Index");
+            return Json(new { IsSuccess = true, Url= Url.Action("Index","Employee")});
         }
     }
 }
